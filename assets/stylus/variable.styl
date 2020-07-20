@@ -1,0 +1,50 @@
+color-main = #333
+color-minor = #ff544b
+gray-100 = #fafafa
+gray-80 = #eee
+gray-60 = #afafaf
+gray-40 = #ddd
+font-roboto = 'roboto_condensedregular'
+font-roboto-light = 'roboto_condensedlight'
+content-padding = 14px
+index-level-normal = 1
+index-level-medium = 9
+index-level-premier = 10
+index-level-float = 11
+index-level-dimmer = 99
+index-level-modal = 100
+index-level-toast = 1001
+index-level-loading = 102
+index-level-important = 109
+clearfix()
+  &:after
+    display table
+    content ''
+    clear both
+lineEllipsis()
+  text-overflow ellipsis
+  white-space nowrap
+  overflow hidden
+multiLine(lines)
+  overflow hidden
+  text-overflow: ellipsis
+  display -webkit-box
+  -webkit-line-clamp lines
+  -webkit-box-orient vertical
+border-1px(color,width,radius)
+  position relative
+  &:after
+    content ''
+    position absolute
+    left 0
+    top 0
+    pointer-events none
+    box-sizing border-box
+    transform scale(.5)
+    transform-origin 0 0
+    width 200%
+    height 200%
+    border width solid color
+    border-radius radius
+
+
