@@ -1,5 +1,4 @@
 export default {
-  ssrLog: true,
   publicRuntimeConfig: {
     baseUrl: process.env.BASE_URL,
     serverUrl: process.env.SERVER_URL,
@@ -8,7 +7,7 @@ export default {
   mode: 'universal',
   target: 'server',
   head: {
-    title: 'y-closet',
+    title: 'my-title',
     meta: [
       { charset: 'utf-8' },
       {
@@ -19,7 +18,7 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'fashion,clothes,china,commercial',
+        content: '',
       },
       { name: 'format-detection', content: 'telephone=no' },
     ],
