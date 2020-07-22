@@ -1,0 +1,42 @@
+
+$banner_name = 'banner'
+$banner_size = 375px 282px
+$banner_offset = 0px 0px
+$banner_position = 0px 0px
+$banner_image = '~static/img/spr.png'
+$banner_scale = 375px 282px
+$banner = 0px 0px 0px 0px 375px 282px 375px 282px '~static/img/spr.png' 'banner'
+
+spriteWidth($sprite) {
+  width: $sprite[4];
+}
+spriteHeight($sprite) {
+  height: $sprite[5];
+}
+spritePosition($sprite) {
+  background-position: $sprite[2] $sprite[3];
+}
+spriteImage($sprite) {
+  background-image: url($sprite[8]);
+}
+
+spriteSize($sprite) {
+  background-size: $sprite[6] $sprite[7];
+}
+
+sprite($sprite) {
+  spriteImage($sprite)
+  spritePosition($sprite)
+  spriteWidth($sprite)
+  spriteHeight($sprite)
+  spriteSize($sprite)
+}
+
+sprites($sprites) {
+  for $sprite in $sprites {
+    $sprite_name = $sprite[9];
+    .{$sprite_name} {
+      sprite($sprite);
+    }
+  }
+}

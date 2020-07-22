@@ -1,4 +1,13 @@
-export default function ({ $axios, redirect, $config }) {
+/* eslint-disable */
+function startLoading(state) {
+  state.commit('ui/changeLoading', true)
+}
+
+function finishLoading(state) {
+  state.commit('ui/changeLoading', false)
+}
+
+export default function ({ $axios, redirect, $config, store }) {
   // request interceptor
   $axios.interceptors.request.use(
     (config) => {
@@ -18,10 +27,11 @@ export default function ({ $axios, redirect, $config }) {
     }
   )
   $axios.onRequest((config) => {
-    console.log('Making request to ' + config.url)
+    startLoading(store)
   })
-
-  // response interceptor
+  $axios.onResponse((config) => {
+    finishLoading(store)
+  })
   $axios.interceptors.response.use(
     /**
      * Determine the request status by custom code
@@ -30,6 +40,7 @@ export default function ({ $axios, redirect, $config }) {
      */
     (response) => {
       const res = response.data
+      console.log(res, 'this is response')
       if (res.code === 200) {
         return res
       } else {
@@ -40,12 +51,12 @@ export default function ({ $axios, redirect, $config }) {
     },
     (error) => {
       console.log('err' + error) // for debug
-
       return Promise.reject(error)
     }
   )
 
   $axios.onError((error) => {
+    finishLoading(store)
     const code = parseInt(error.response && error.response.status)
     if (code === 400) {
       redirect('/404')

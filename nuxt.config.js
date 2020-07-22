@@ -1,4 +1,5 @@
 export default {
+  loading: '~/components/ui/loading.vue',
   publicRuntimeConfig: {
     baseUrl: process.env.BASE_URL,
     serverUrl: process.env.SERVER_URL,
@@ -7,10 +8,12 @@ export default {
   mode: 'universal',
   target: 'server',
   head: {
-    title: 'my-title',
+    title: 'y-closet',
     meta: [
       { charset: 'utf-8' },
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
       {
+        hid: 'viewport',
         name: 'viewport',
         content:
           'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes',
@@ -18,7 +21,7 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: '',
+        content: 'fashion,clothes,china,commercial',
       },
       { name: 'format-detection', content: 'telephone=no' },
     ],
@@ -29,7 +32,7 @@ export default {
     name: 'layout',
     mode: 'out-in',
   },
-  plugins: ['~/plugins/axios-interceptors'], //前端请求拦截器
+  plugins: ['~/plugins/axios-interceptors', '~/plugins/meta-cleaner'], //前端请求拦截器
   components: true,
   router: {
     middleware: ['router'],
@@ -42,9 +45,16 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
     'nuxt-i18n',
+    [
+      '@nuxtjs/component-cache',
+      {
+        max: 100,
+        maxAge: 1000 * 60,
+      },
+    ],
   ],
   axios: {},
-  devtools: 'source-map',
+  // devtools: 'source-map',
   build: {
     postcss: {
       plugins: {
@@ -76,6 +86,40 @@ export default {
       },
     },
     babel: {},
+    extend(config, { isClient }) {
+      if (isClient) {
+        const SpritesmithPlugin = require('webpack-spritesmith')
+        const path = require('path')
+        config.plugins.push(
+          new SpritesmithPlugin({
+            src: {
+              cwd: path.resolve(__dirname, 'assets/sprs'),
+              glob: '*.png',
+            },
+            target: {
+              image: path.resolve(__dirname, 'static/img/spr.png'),
+              css: [
+                [
+                  path.resolve(__dirname, 'static/stylus/spr.styl'),
+                  {
+                    format: 'spritesmithTemplate',
+                  },
+                ],
+              ],
+            },
+            apiOptions: {
+              cssImageRef: '~static/img/spr.png',
+            },
+            customTemplates: {
+              spritesmithTemplate: spritesmithTemplate,
+            },
+            spritesmithOptions: {
+              padding: 4,
+            },
+          })
+        )
+      }
+    },
   },
   styleResources: {
     css: '~assets/css/main.css',
@@ -100,4 +144,28 @@ export default {
     lazy: true,
     langDir: 'lang/',
   },
+}
+
+function spritesmithTemplate(data) {
+  const fs = require('fs')
+  const _ = require('lodash')
+  var tpl = fs.readFileSync('./assets/tools/sprites.tpl')
+  data.sprites.forEach((item) => {
+    let match = item.name.match(/@(2|3)(?=x)/g)
+    if (match) {
+      match = match[0].replace(/@/g, '')
+    } else {
+      match = 1
+    }
+    item.name = item.name.replace(/@(2|3)x/g, '')
+    item.pxr = {}
+    Object.keys(item.px).forEach((key) => {
+      item.pxr[key] =
+        parseFloat(item.px[key].replace(/px/g, '') / match, 2) + 'px'
+    })
+  })
+  var compiled = _.template(tpl)
+  return compiled({
+    sprites: data.sprites,
+  })
 }

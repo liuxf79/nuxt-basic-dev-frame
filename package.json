@@ -1,5 +1,5 @@
 {
-  "name": "my-ssr-nuxt",
+  "name": "ycloset",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.11.0",
+    "@nuxtjs/component-cache": "^1.1.6",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "access-log": "^0.4.1",
+    "lru-cache": "^6.0.0",
     "nuxt": "^2.13.0",
     "nuxt-i18n": "^6.13.1"
   },
@@ -38,6 +40,7 @@
     "postcss-write-svg": "^3.0.1",
     "prettier": "^2.0.5",
     "stylus": "^0.54.8",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.2",
+    "webpack-spritesmith": "^1.1.0"
   }
 }

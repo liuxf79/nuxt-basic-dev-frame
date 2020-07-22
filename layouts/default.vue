@@ -3,13 +3,24 @@
     <keep-alive>
       <nuxt />
     </keep-alive>
+    <toast />
   </div>
 </template>
 <style lang="stylus">
-.layout-enter-active, .layout-leave-active {
+// 全局样式设置
+html,body
+  padding 0
+  margin 0
+.layout-enter-active, .layout-leave-active
   transition: opacity .3s
-}
-.layout-enter, .layout-leave-active {
+.layout-enter, .layout-leave-active
   opacity: 0
-}
 </style>
+<script>
+import toast from '~/components/ui/toast.vue'
+export default {
+  components: {
+    toast,
+  },
+}
+</script>

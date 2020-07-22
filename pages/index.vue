@@ -9,22 +9,54 @@
     <button style="margin: 50px;" @click="testAxios">测试请求</button>
     <div>
       <h3>{{ counter }}</h3>
-      <button @click="increase">增加</button>
+      <button @click="increase">增加1111</button>
       <button @click="remove">减少</button>
     </div>
+    <div class="sprites" :class="$style.banner__sprite">这里是雪碧图</div>
   </div>
 </template>
 <script>
+/* eslint-disable */
 import '~/assets/js/utils'
 export default {
-  asyncData({ app, $config }) {},
+  name: 'Index',
+  asyncData({ app, $config }) {
+    // const dataArr = await app.$axios
+    //   .get(
+    //     'https://api.95vintage.com/ms/content/v1/page/discoverPage?regionId=52',
+    //     {
+    //       data: { w: 123 },
+    //     }
+    //   )
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    // console.log(dataArr)
+    return {
+      d: true,
+    }
+  },
+  computed: {
+    counter() {
+      return this.$store.state.ui.count
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+      setTimeout(() => this.$nuxt.$loading.finish(), 1500)
+    })
+  },
+
   methods: {
     goAbout() {
       this.$router.push(this.localePath('/about'))
     },
     testAxios() {
       this.$axios
-        .post('/api/index?a=c&b=3', { data: { w: 123 } })
+        .get('/ms/content/v1/page/discoverPage?regionId=52', {
+          data: { w: 123 },
+        })
         .then((res) => {
           console.log(res.data)
         })
@@ -39,21 +71,20 @@ export default {
       this.$store.commit('ui/remove', 2)
     },
   },
-  computed: {
-    counter() {
-      return this.$store.state.ui.count
-    },
-  },
 }
 </script>
 
 <style lang="stylus" module>
 .container
   background yellow
+  height 1000px
 .divBox
   width 80px
   lineEllipsis()
 .goAbout
   font-size 18px
   width 100%
+@import '~static/stylus/spr.styl'
+.banner__sprite
+  sprite($banner)
 </style>
