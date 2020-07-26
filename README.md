@@ -1,7 +1,5 @@
 # INTRODUCTION
 
-<!-- ### Build Setup -->
-
 ```bash
 # install dependencies
 $ npm install
@@ -41,6 +39,7 @@ yshop/
 ├─ecosystem.config.js //pm2 settings
 ├─nuxt.config.js  //nuxt settings
 ├─package.json
+├─api
 ├─store
 ├─static
 ├─server-middleware
@@ -64,3 +63,77 @@ yshop/
 
 - vue filename use single word and lower case，modules use folder
 - refer nuxt router rules to create child pages router
+
+### Common Usage
+
+- **[nuxt-i18n](https://i18n.nuxtjs.org/)**
+  -- create keys that content need i18n in `lang/`
+  ```js
+  // lang/zh-CN.js
+  export default {
+    welcome: '欢迎',
+  }
+  ```
+
+```html
+<!-- template-->
+<h2>{{ $t('welcome') }}</h2>
+```
+
+-- get current locale
+
+```js
+this.$i18n.locale
+```
+
+-- change route with
+
+```html
+<nuxt-link :to="localePath('/target-route')"></nuxt-link>
+```
+
+or
+
+```js
+this.$router.push(this.localePath('/target-route'))
+```
+
+-- change locale with
+
+```js
+this.$i18n.setLocale('zh')
+```
+
+- **toast**
+
+[material icons](https://material.io/resources/icons/?icon=3d_rotation&style=baseline)
+
+```js
+this.$toast.show('toast content', {
+  icon: 'show icon before content with material icons, default null',
+  duration: 'display time with millisecond，default 1500',
+})
+```
+
+- **request**
+
+```js
+//create a api in api/index.js
+export const HOME_PAGE_DATA = '/page/index' // 首页数据
+
+//use api-name to get result in promise
+// $request.get or $request.post,with params
+this.$request.get('HOME_PAGE_DATA', {
+  prams: params,
+})
+```
+
+- **auth**
+
+```js
+//login status
+const loginStatus = this.$auth.loggedIn //boolean result
+
+//user info
+const user = this.$auth.user
+```
